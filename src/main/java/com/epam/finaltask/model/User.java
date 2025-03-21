@@ -1,14 +1,24 @@
 package com.epam.finaltask.model;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+@Setter
+@Getter
+@Table(name = "\"user\"")
 @Entity
 public class User {
-
+	@Id
+	@GeneratedValue(generator = "UUID")
     private UUID id;
 
     private String username;
@@ -16,77 +26,20 @@ public class User {
     private String password;
 
     private Role role;
-
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Voucher> vouchers;
 
     private String phoneNumber;
 
-    private BigDecimal balance;
+    private Double balance;
 
     private boolean active;
 
-	public UUID getId() {
-		return id;
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	public void addVoucher(Voucher voucher) {
+		vouchers.add(voucher);
 	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public List<Voucher> getVouchers() {
-		return vouchers;
-	}
-
-	public void setVouchers(List<Voucher> vouchers) {
-		this.vouchers = vouchers;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public BigDecimal getBalance() {
-		return balance;
-	}
-
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-    
 }

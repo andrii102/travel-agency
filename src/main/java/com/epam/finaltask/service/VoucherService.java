@@ -15,7 +15,6 @@ public interface VoucherService {
     List<VoucherDTO> findAllByUserId(String userId);
 
     List<VoucherDTO> findAllByTourType(TourType tourType);
-    List<VoucherDTO> findAllByTransferType(String transferType);
     List<VoucherDTO> findAllByPrice(Double price);
     List<VoucherDTO> findAllByHotelType(HotelType hotelType);
 
