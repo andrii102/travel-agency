@@ -80,9 +80,9 @@ public class VoucherServiceImpl implements VoucherService{
     public List<VoucherDTO> findAllByUserId(String userId) {
         List<Voucher> vouchers = voucherRepo.findAllByUserId(UUID.fromString(userId));
         List<VoucherDTO> vouchersDTO = new ArrayList<>();
-        vouchers.forEach(voucher -> {
+        for (Voucher voucher : vouchers) {
             vouchersDTO.add(voucherMapper.toVoucherDTO(voucher));
-        });
+        }
         return vouchersDTO;
     }
 
@@ -90,19 +90,19 @@ public class VoucherServiceImpl implements VoucherService{
     public List<VoucherDTO> findAllByTourType(TourType tourType) {
         List<Voucher> vouchers = voucherRepo.findAllByTourType(tourType);
         List<VoucherDTO> vouchersDTO = new ArrayList<>();
-        vouchers.forEach(voucher -> {
+        for (Voucher voucher : vouchers) {
             vouchersDTO.add(voucherMapper.toVoucherDTO(voucher));
-        });
+        }
         return vouchersDTO;
     }
 
     @Override
     public List<VoucherDTO> findAllByPrice(Double price) {
-        List<Voucher> vouchers = voucherRepo.findAllByPrice(Double.valueOf(price));
+        List<Voucher> vouchers = voucherRepo.findAllByPrice(price);
         List<VoucherDTO> vouchersDTO = new ArrayList<>();
-        vouchers.forEach(voucher -> {
+        for (Voucher voucher : vouchers) {
             vouchersDTO.add(voucherMapper.toVoucherDTO(voucher));
-        });
+        }
         return vouchersDTO;
     }
 
@@ -110,9 +110,9 @@ public class VoucherServiceImpl implements VoucherService{
     public List<VoucherDTO> findAllByHotelType(HotelType hotelType) {
         List<Voucher> vouchers = voucherRepo.findAllByHotelType(hotelType);
         List<VoucherDTO> vouchersDTO = new ArrayList<>();
-        vouchers.forEach(voucher -> {
+        for (Voucher voucher : vouchers) {
             vouchersDTO.add(voucherMapper.toVoucherDTO(voucher));
-        });
+        }
         return vouchersDTO;
     }
 
@@ -120,10 +120,11 @@ public class VoucherServiceImpl implements VoucherService{
     public List<VoucherDTO> findAll() {
         List<Voucher> vouchers = voucherRepo.findAll();
         List<VoucherDTO> vouchersDTO = new ArrayList<>();
-        vouchers.forEach(voucher -> {
+        for (Voucher voucher : vouchers) {
             vouchersDTO.add(voucherMapper.toVoucherDTO(voucher));
-        });
+        }
         return vouchersDTO;
     }
+
 
 }
