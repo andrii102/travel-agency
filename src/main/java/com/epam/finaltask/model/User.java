@@ -25,6 +25,7 @@ public class User {
 
     private String password;
 
+	@Enumerated(EnumType.STRING)
     private Role role;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Voucher> vouchers;

@@ -30,12 +30,21 @@ public class ApplicationConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/h2-console/**").permitAll()
+                        .requestMatchers("/register", "/login", "/h2-console/**").permitAll()
                         .anyRequest().authenticated())
 
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable) // Ensure no conflicts with JWT
+                .securityContext(securityContext -> securityContext
+                        .requireExplicitSave(false)  // Spring should retain authentication
+                )
+                .formLogin(form -> form
+                        .loginPage("/login") // Custom login page
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .addFilterBefore(jwtRequstFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())) // Disable X-Frame-Options for H2 console
                 .build();
