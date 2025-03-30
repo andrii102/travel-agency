@@ -1,6 +1,6 @@
 package com.epam.finaltask.model;
 
-import java.math.BigDecimal;
+import jakarta.validation.constraints.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -21,20 +21,27 @@ public class User {
 	@GeneratedValue(generator = "UUID")
     private UUID id;
 
+	@NotBlank(message = "Username is required")
+	@Size(min=4, max=20, message = "Username must be 4-20 characters")
     private String username;
 
+	@NotBlank(message = "Password is required")
+	@Size(min=8, message = "Password must be at least 8 characters")
     private String password;
 
 	@Enumerated(EnumType.STRING)
     private Role role;
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Voucher> vouchers;
 
+	@Pattern(regexp = "\\+[0-9]{10,15}", message = "Invalid phone number format")
     private String phoneNumber;
 
+	@DecimalMin(value = "0.0", message = "Balance cannot be negative")
     private Double balance;
 
-    private boolean active;
+    private boolean accountStatus;
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
@@ -42,5 +49,9 @@ public class User {
 
 	public void addVoucher(Voucher voucher) {
 		vouchers.add(voucher);
+	}
+
+	public void setActive(boolean b) {
+		accountStatus = b;
 	}
 }

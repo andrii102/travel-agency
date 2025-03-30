@@ -6,7 +6,7 @@ CREATE TABLE "user"
     role           VARCHAR(255),
     phone_number   VARCHAR(255),
     balance        DOUBLE PRECISION,
-    active BOOLEAN NOT NULL,
+    account_status BOOLEAN NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
