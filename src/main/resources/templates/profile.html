@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:lang="en" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{profile.title}">My Profile - Travel Agency</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Profile Header -->
+<header class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Profile Photo">
+        <h1 th:text="#{profile.welcome(${user.username})}">Welcome, John</h1>
+        <p class="lead mb-0" th:text="#{profile.member_since('2023')}">Member since 2023</p>
+    </div>
+</header>
+
+<!-- Profile Content -->
+<section class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white" th:text="#{profile.navigation}">Navigation</div>
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action active" th:text="#{profile.overview}">
+                        <i class="bi bi-house-door me-2"></i> Overview
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" th:text="#{profile.bookings}">
+                        <i class="bi bi-calendar-check me-2"></i> My Bookings
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" th:text="#{profile.settings}">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header" th:text="#{profile.upcoming_trips}">Upcoming Trips</div>
+                <div class="card-body">
+                    <div class="alert alert-info" th:utext="#{profile.no_upcoming_trips}">
+                        У вас немає майбутніх подорожей. <a href="/tours">Перегляньте тури</a>, щоб забронювати наступну пригоду!
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header" th:text="#{profile.personal_info}">Personal Information</div>
+                <div class="card-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" th:text="#{profile.first_name}">First Name</label>
+                                <input type="text" class="form-control" value="John">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" th:text="#{profile.last_name}">Last Name</label>
+                                <input type="text" class="form-control" value="Doe">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{profile.email}">Email</label>
+                            <input type="email" class="form-control" value="john@example.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary" th:text="#{profile.save_changes}">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

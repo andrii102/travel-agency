@@ -14,9 +14,8 @@ import java.util.UUID;
 @Entity
 public class Voucher {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition = "VARCHAR(36)", insertable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "voucher_id", columnDefinition = "UUID")
     private UUID id;
 
     @NotBlank(message = "Title is required")
@@ -55,9 +54,10 @@ public class Voucher {
     @Future(message = "Eviction date must be in the future")
     private LocalDate evictionDate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id") //id
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
     private boolean isHot;
 }

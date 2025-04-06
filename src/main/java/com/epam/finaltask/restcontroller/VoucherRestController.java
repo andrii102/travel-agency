@@ -2,6 +2,7 @@ package com.epam.finaltask.restcontroller;
 
 import com.epam.finaltask.dto.VoucherDTO;
 import com.epam.finaltask.service.VoucherService;
+import com.epam.finaltask.service.VoucherServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

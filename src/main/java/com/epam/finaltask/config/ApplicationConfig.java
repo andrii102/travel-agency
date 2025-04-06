@@ -31,8 +31,9 @@ public class ApplicationConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register", "/login", "/h2-console/**").permitAll()
+                        .requestMatchers("/","/register", "/login", "/h2-console/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/tours", "/about", "/profile").authenticated()
                         .anyRequest().authenticated())
                 .httpBasic(AbstractHttpConfigurer::disable) // Ensure no conflicts with JWT
                 .securityContext(securityContext -> securityContext

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="footer">
+<!-- Footer Section -->
+<footer class="bg-dark text-white pt-5 pb-4">
+    <div class="container">
+        <div class="row">
+            <!-- Company Info -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase mb-4" th:text="#{footer.about}">About TravelEase</h5>
+                <p th:text="#{footer.description}">Your trusted partner for unforgettable travel experiences since 2010. We specialize in customized tours and premium vacations.</p>
+                <div class="mt-4">
+                    <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-twitter-x fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-2 mb-4">
+                <h5 class="text-uppercase mb-4" th:text="#{footer.quickLinks}">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a th:href="@{/}" class="text-white text-decoration-none" th:text="#{navbar.home}">Home</a></li>
+                    <li class="mb-2"><a th:href="@{/tours}" class="text-white text-decoration-none" th:text="#{navbar.vouchers}">Tours</a></li>
+                    <li class="mb-2"><a th:href="@{/about}" class="text-white text-decoration-none" th:text="#{navbar.about}">About</a></li>
+                    <li class="mb-2"><a th:href="@{/faq}" class="text-white text-decoration-none" th:text="#{footer.faq}">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-md-3 mb-4">
+                <h5 class="text-uppercase mb-4" th:text="#{footer.contact}">Contact Us</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill me-2 text-primary"></i>
+                        <span th:text="#{footer.address}">123 Travel Street, Adventure City, 10101</span>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-telephone-fill me-2 text-primary"></i>
+                        <a href="tel:+1234567890" class="text-white text-decoration-none" th:text="#{footer.phone}">+1 (234) 567-890</a>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-envelope-fill me-2 text-primary"></i>
+                        <a href="mailto:info@travelagency.com" class="text-white text-decoration-none">info@travelagency.com</a>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-clock-fill me-2 text-primary"></i>
+                        <span th:text="#{footer.hours}">Mon-Fri: 9AM - 6PM</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="col-md-3 mb-4">
+                <h5 class="text-uppercase mb-4" th:text="#{footer.newsletter}">Newsletter</h5>
+                <p th:text="#{footer.newsletter.description}">Subscribe for travel deals and tips!</p>
+                <form>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email" aria-label="Email"
+                               th:placeholder="#{footer.newsletter.placeholder}">
+                        <button class="btn btn-primary" type="button" th:text="#{footer.newsletter.button}">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-3">
+                    <img th:src="@{/images/payment-options.png}" alt="Payment options" class="img-fluid" style="max-height: 30px;">
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4 bg-light">
+
+        <!-- Copyright -->
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0" th:text="'&copy; ' + ${#temporals.year(#temporals.createNow())} + ' ' + #{app.title} + '. ' + #{footer.rights}">
+                    &copy; 2024 TravelEase. All Rights Reserved.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a th:href="@{/privacy}" class="text-white text-decoration-none me-3" th:text="#{footer.privacy}">Privacy Policy</a>
+                <a th:href="@{/terms}" class="text-white text-decoration-none" th:text="#{footer.terms}">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Back to Top Button -->
+<a href="#" class="btn btn-primary btn-lg back-to-top" role="button">
+    <i class="bi bi-arrow-up"></i>
+</a>
+
+<style>
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        z-index: 99;
+    }
+</style>
+
+<script>
+    // Back to top button
+    window.addEventListener('scroll', function() {
+        var scrollPosition = window.scrollY;
+        var backToTopButton = document.querySelector('.back-to-top');
+        if (scrollPosition > 300) {
+            backToTopButton.style.display = 'flex';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

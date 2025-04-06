@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="#{app.title}">Travel Agency</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- vouchers Hero -->
+<header class="bg-primary text-white text-center py-5 mb-4">
+  <div class="container">
+    <h1 class="display-4" th:text="#{vouchers.title}">Discover Our vouchers</h1>
+    <p class="lead" th:text="#{vouchers.subtitle}">Find your perfect adventure</p>
+  </div>
+</header>
+
+<!-- Search & Filters -->
+<section class="container mb-5">
+  <form class="card shadow-sm" method="get" th:action="@{/vouchers}">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+
+        <!-- Tour Type -->
+        <div class="col-md-3">
+          <label class="form-label">Tour Type</label>
+          <select class="form-select" name="tourType">
+            <option value="">All</option>
+            <option>HEALTH</option>
+            <option>SPORTS</option>
+            <option>LEISURE</option>
+            <option>SAFARI</option>
+            <option>WINE</option>
+            <option>ECO</option>
+            <option>ADVENTURE</option>
+            <option>CULTURAL</option>
+          </select>
+        </div>
+
+        <!-- Price Range -->
+        <div class="col-md-2">
+          <label class="form-label">Min Price</label>
+          <input type="number" class="form-control" name="minPrice" placeholder="0">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Max Price</label>
+          <input type="number" class="form-control" name="maxPrice" placeholder="5000">
+        </div>
+
+        <!-- Transfer Type -->
+        <div class="col-md-2">
+          <label class="form-label">Transfer Type</label>
+          <select class="form-select" name="transferType">
+            <option value="">All</option>
+            <option>BUS</option>
+            <option>TRAIN</option>
+            <option>PLANE</option>
+            <option>SHIP</option>
+            <option>PRIVATE_CAR</option>
+            <option>JEEPS</option>
+            <option>MINIBUS</option>
+            <option>ELECTRICAL_CARS</option>
+          </select>
+        </div>
+
+        <!-- Hotel Type -->
+        <div class="col-md-2">
+          <label class="form-label">Hotel Type</label>
+          <select class="form-select" name="hotelType">
+            <option value="">All</option>
+            <option>ONE_STAR</option>
+            <option>TWO_STARS</option>
+            <option>THREE_STARS</option>
+            <option>FOUR_STARS</option>
+            <option>FIVE_STARS</option>
+          </select>
+        </div>
+
+        <!-- Search Button -->
+        <div class="col-md-1">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</section>
+
+
+<section class="container mb-5">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" th:each="voucher : ${vouchers}">
+      <div class="card h-100 shadow-sm">
+<!--        <img th:src="${voucher.imageUrl}" class="card-img-top" th:alt="${tour.title}">-->
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="badge bg-danger"
+                  th:if="${voucher != null and voucher.isHot}"
+                  th:text="#{vouchers.isHot}">Hot</span>
+            <span class="text-primary fw-bold" th:text="#{vouchers.from_price(${voucher.price})}">
+              From $299
+            </span>
+          </div>
+          <h5 class="card-title" th:text="${voucher.title}">Kyiv City Tour</h5>
+          <p class="card-text" th:text="${voucher.description}">
+            Explore the historic capital of Ukraine with our expert guides.
+          </p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <i class="bi bi-calendar me-1"></i>
+              <span th:text="${voucher.arrivalDate} + '-' + ${voucher.evictionDate}"></span>
+            </div>
+            <a th:href="@{'/vouchers/' + ${voucher.id}}" class="btn btn-primary" th:text="#{vouchers.book_now}">Book Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Pagination -->
+  <nav class="mt-5">
+    <ul class="pagination justify-content-center">
+      <!-- Previous Button -->
+      <li class="page-item" th:class="${currentPage == 0 ? 'disabled' : ''}">
+        <a class="page-link"
+           th:href="@{|/vouchers?page=${currentPage - 1}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}"
+           tabindex="-1">Previous</a>
+      </li>
+
+      <!-- Dynamic Page Number Links -->
+      <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i ? 'active' : ''}">
+        <a class="page-link"
+           th:href="@{|/vouchers?page=${i}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}"
+           th:text="${i + 1}"></a>
+      </li>
+
+      <!-- Next Button -->
+      <li class="page-item" th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+        <a class="page-link"
+           th:href="@{|/vouchers?page=${currentPage + 1}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+</section>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
