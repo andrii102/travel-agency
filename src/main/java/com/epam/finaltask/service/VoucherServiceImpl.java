@@ -8,12 +8,16 @@ import com.epam.finaltask.model.*;
 import com.epam.finaltask.repository.UserRepository;
 import com.epam.finaltask.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class VoucherServiceImpl implements VoucherService{
@@ -37,8 +41,8 @@ public class VoucherServiceImpl implements VoucherService{
         Optional<Voucher> voucher = voucherRepo.findById(UUID.fromString(id));
         if(user.isPresent() && voucher.isPresent()){
             user.get().addVoucher(voucher.get());
-//            voucher.get().setUser(user.get());
-//            voucherRepo.save(voucher.get());
+            voucher.get().setUser(user.get());
+            voucherRepo.save(voucher.get());
             return voucherMapper.toVoucherDTO(voucher.get());
         }
         throw new EntityNotFoundException(StatusCodes.ENTITY_NOT_FOUND.name(), "Error occured");
@@ -126,21 +130,21 @@ public class VoucherServiceImpl implements VoucherService{
         return vouchersDTO;
     }
 
-//    public VoucherDTO findById(String id) {
-//        Optional<Voucher> voucher =  voucherRepo.findById(UUID.fromString(id));
-//        if(voucher.isPresent()){
-//            return voucherMapper.toVoucherDTO(voucher.get());
-//        }
-//        throw new EntityNotFoundException(StatusCodes.ENTITY_NOT_FOUND.name(), "Not found");
-//    }
-//
-//    public Page<VoucherDTO> findFilteredVouchers(TourType tourType, Double minPrice, Double maxPrice, TransferType transferType, HotelType hotelType, Pageable pageable) {
-//        Page<Voucher> voucherPage = voucherRepo.findFilteredVouchers(tourType, minPrice, maxPrice, transferType, hotelType, pageable);
-//
-//        List<VoucherDTO> voucherDTOList = voucherPage.getContent().stream()
-//                .map(voucherMapper::toVoucherDTO)
-//                .collect(Collectors.toList());
-//
-//        return new PageImpl<>(voucherDTOList, pageable, voucherPage.getTotalElements());
-//    }
+    public VoucherDTO findById(String id) {
+        Optional<Voucher> voucher =  voucherRepo.findById(UUID.fromString(id));
+        if(voucher.isPresent()){
+            return voucherMapper.toVoucherDTO(voucher.get());
+        }
+        throw new EntityNotFoundException(StatusCodes.ENTITY_NOT_FOUND.name(), "Not found");
+    }
+
+    public Page<VoucherDTO> findFilteredVouchers(TourType tourType, Double minPrice, Double maxPrice, TransferType transferType, HotelType hotelType, Pageable pageable) {
+        Page<Voucher> voucherPage = voucherRepo.findFilteredVouchers(tourType, minPrice, maxPrice, transferType, hotelType, pageable);
+
+        List<VoucherDTO> voucherDTOList = voucherPage.getContent().stream()
+                .map(voucherMapper::toVoucherDTO)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(voucherDTOList, pageable, voucherPage.getTotalElements());
+    }
 }

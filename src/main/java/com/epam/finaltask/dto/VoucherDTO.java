@@ -28,20 +28,20 @@ public class VoucherDTO {
 	private Double price;
 
 	@NotBlank(message = "Tour type is required")
-//	private TourType tourType;
-	private String tourType;
+	private TourType tourType;
+//	private String tourType;
 
 	@NotBlank(message = "Transfer type is required")
-//	private TransferType transferType;
-	private String transferType;
+	private TransferType transferType;
+//	private String transferType;
 
 	@NotBlank(message = "Hotel type is required")
-//	private HotelType hotelType;
-	private String hotelType;
+	private HotelType hotelType;
+//	private String hotelType;
 
 	@NotBlank(message = "Status is required")
-//	private VoucherStatus status;
-	private String status;
+	private VoucherStatus status;
+//	private String status;
 
 	@NotNull(message = "Arrival date is required")
 	private LocalDate arrivalDate;

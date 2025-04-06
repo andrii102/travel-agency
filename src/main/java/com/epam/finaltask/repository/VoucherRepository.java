@@ -22,17 +22,17 @@ public interface VoucherRepository extends JpaRepository<Voucher, UUID> {
     List<Voucher> findAllByPrice(Double price);
     List<Voucher> findAllByHotelType(HotelType hotelType);
 
-//    @Query("SELECT v FROM Voucher v WHERE (v.user IS NULL) " +
-//            "AND (:tourType IS NULL OR v.tourType = :tourType) " +
-//            "AND (:minPrice IS NULL OR v.price >= :minPrice) " +
-//            "AND (:maxPrice IS NULL OR v.price <= :maxPrice) " +
-//            "AND (:transferType IS NULL OR v.transferType = :transferType) " +
-//            "AND (:hotelType IS NULL OR v.hotelType = :hotelType)")
-//    Page<Voucher> findFilteredVouchers(@Param("tourType") TourType tourType,
-//                                       @Param("minPrice") Double minPrice,
-//                                       @Param("maxPrice") Double maxPrice,
-//                                       @Param("transferType") TransferType transferType,
-//                                       @Param("hotelType") HotelType hotelType,
-//                                       Pageable pageable);
+    @Query("SELECT v FROM Voucher v WHERE (v.user IS NULL) " +
+            "AND (:tourType IS NULL OR v.tourType = :tourType) " +
+            "AND (:minPrice IS NULL OR v.price >= :minPrice) " +
+            "AND (:maxPrice IS NULL OR v.price <= :maxPrice) " +
+            "AND (:transferType IS NULL OR v.transferType = :transferType) " +
+            "AND (:hotelType IS NULL OR v.hotelType = :hotelType)")
+    Page<Voucher> findFilteredVouchers(@Param("tourType") TourType tourType,
+                                       @Param("minPrice") Double minPrice,
+                                       @Param("maxPrice") Double maxPrice,
+                                       @Param("transferType") TransferType transferType,
+                                       @Param("hotelType") HotelType hotelType,
+                                       Pageable pageable);
 
 }

@@ -24,8 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/vouchers")
 public class VoucherController {
 
-//    @Autowired
-//    private VoucherServiceImpl voucherService;
+    @Autowired
+    private VoucherServiceImpl voucherService;
 
     @Autowired
     private UserServiceImpl userService;
@@ -41,17 +41,15 @@ public class VoucherController {
 
         model.addAttribute("currentUri", request.getRequestURI());
 
-        // Pagination settings
         int pageSize = 6;
-//        Page<VoucherDTO> vouchersPage = voucherService.findFilteredVouchers(tourType, minPrice, maxPrice, transferType, hotelType, PageRequest.of(page, pageSize));
+        Page<VoucherDTO> vouchersPage = voucherService.findFilteredVouchers(tourType, minPrice, maxPrice, transferType, hotelType, PageRequest.of(page, pageSize));
 
-        // Pagination and filtering information
-//        model.addAttribute("vouchers", vouchersPage);
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", vouchersPage.getTotalPages());
-//        model.addAttribute("minPrice", minPrice);
-//        model.addAttribute("transferType", transferType);
-//        model.addAttribute("hotelType", hotelType);
+        model.addAttribute("vouchers", vouchersPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", vouchersPage.getTotalPages());
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("transferType", transferType);
+        model.addAttribute("hotelType", hotelType);
 
         return "vouchers";
     }
@@ -59,7 +57,7 @@ public class VoucherController {
     @GetMapping("/{voucher_id}")
     public String voucherById(@PathVariable("voucher_id") String voucher_id, Model model, HttpServletRequest request) {
         model.addAttribute("currentUri", request.getRequestURI());
-//        model.addAttribute("voucher", voucherService.findById(voucher_id));
+        model.addAttribute("voucher", voucherService.findById(voucher_id));
         return "voucher";
     }
 
@@ -68,7 +66,7 @@ public class VoucherController {
         model.addAttribute("currentUri", request.getRequestURI());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDTO userDTO = userService.getUserByUsername(auth.getName());
-//        voucherService.order(voucher_id, userDTO.getId());
+        voucherService.order(voucher_id, userDTO.getId());
         redirectAttributes.addFlashAttribute("orderSuccess", "Voucher ordered successfully!");
         return "redirect:/vouchers/" + voucher_id;
     }
