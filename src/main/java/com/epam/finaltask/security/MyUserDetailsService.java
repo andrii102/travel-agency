@@ -23,7 +23,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                user.getAuthorities() // Ensure you have a method to get authorities
+                user.getRole().getAuthorities()
         );
     }
 }

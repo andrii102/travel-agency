@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:lang="en" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{app.title}">Travel Agency</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Form Header -->
+<header class="bg-primary text-white text-center py-5 mb-4">
+    <div class="container">
+        <h1 class="display-4" th:text="#{voucher.form.title}">Edit Voucher</h1>
+    </div>
+</header>
+
+<!-- Voucher Form -->
+<div class="container">
+    <form th:action="@{/vouchers/save/{voucher_id}(voucher_id=${voucher.id})}" th:object="${voucher}" method="post" class="needs-validation" novalidate>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('title') ? #fields.errors('title') : ''}"></div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="4" required></textarea>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('description') ? #fields.errors('description') : ''}"></div>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="price" th:field="*{price}" min="0" required>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('price') ? #fields.errors('price') : ''}"></div>
+                </div>
+
+                <!-- Tour Type -->
+                <div class="mb-3">
+                    <label for="tourType" class="form-label">Tour Type</label>
+                    <select class="form-select" id="tourType" th:field="*{tourType}" required>
+                        <option value="" disabled selected th:text="#{voucher.selectTourType}">Select Tour Type</option>
+                        <option th:value="*{TourType.HEALTH}" th:text="#{tourType.health}">Health</option>
+                        <option th:value="*{TourType.SPORTS}" th:text="#{tourType.sports}">Sports</option>
+                        <option th:value="*{TourType.LEISURE}" th:text="#{tourType.leisure}">Leisure</option>
+                        <option th:value="*{TourType.SAFARI}" th:text="#{tourType.safari}">Safari</option>
+                        <option th:value="*{TourType.WINE}" th:text="#{tourType.wine}">Wine</option>
+                        <option th:value="*{TourType.ECO}" th:text="#{tourType.eco}">Eco</option>
+                        <option th:value="*{TourType.ADVENTURE}" th:text="#{tourType.adventure}">Adventure</option>
+                        <option th:value="*{TourType.CULTURAL}" th:text="#{tourType.cultural}">Cultural</option>
+                    </select>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('tourType') ? #fields.errors('tourType') : ''}"></div>
+                </div>
+
+                <!-- Transfer Type -->
+                <div class="mb-3">
+                    <label for="transferType" class="form-label">Transfer Type</label>
+                    <select class="form-select" id="transferType" th:field="*{transferType}" required>
+                        <option value="" disabled selected th:text="#{voucher.selectTransferType}">Select Transfer Type</option>
+                        <option th:value="BUS" th:text="#{transferType.BUS}">Bus</option>
+                        <option th:value="TRAIN" th:text="#{transferType.TRAIN}">Train</option>
+                        <option th:value="PLANE" th:text="#{transferType.PLANE}">Plane</option>
+                        <option th:value="SHIP" th:text="#{transferType.SHIP}">Ship</option>
+                        <option th:value="PRIVATE_CAR" th:text="#{transferType.PRIVATE_CAR}">Private Car</option>
+                        <option th:value="JEEPS" th:text="#{transferType.JEEPS}">Jeeps</option>
+                        <option th:value="MINIBUS" th:text="#{transferType.MINIBUS}">Minibus</option>
+                        <option th:value="ELECTRICAL_CARS" th:text="#{transferType.ELECTRICAL_CARS}">Electrical Cars</option>
+                    </select>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('transferType') ? #fields.errors('transferType') : ''}"></div>
+                </div>
+
+                <!-- Hotel Type -->
+                <div class="mb-3">
+                    <label for="hotelType" class="form-label">Hotel Type</label>
+                    <select class="form-select" id="hotelType" th:field="*{hotelType}" required>
+                        <option value="" disabled selected th:text="#{voucher.selectHotelType}">Select Hotel Type</option>
+                        <option th:value="ONE_STAR" th:text="#{hotelType.ONE_STAR}">1 Star</option>
+                        <option th:value="TWO_STARS" th:text="#{hotelType.TWO_STARS}">2 Stars</option>
+                        <option th:value="THREE_STARS" th:text="#{hotelType.THREE_STARS}">3 Stars</option>
+                        <option th:value="FOUR_STARS" th:text="#{hotelType.FOUR_STARS}">4 Stars</option>
+                        <option th:value="FIVE_STARS" th:text="#{hotelType.FIVE_STARS}">5 Stars</option>
+                    </select>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('hotelType') ? #fields.errors('hotelType') : ''}"></div>
+                </div>
+
+                <!-- Status -->
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" th:field="*{status}" required>
+                        <option value="" disabled selected th:text="#{voucher.selectStatus}">Select Status</option>
+                        <option th:value="PAID" th:text="#{voucher.status.paid}">PAID</option>
+                        <option th:value="REGISTERED" th:text="#{voucher.status.registered}">REGISTERED</option>
+                        <option th:value="CANCELED" th:text="#{voucher.status.canceled}">CANCELED</option>
+                    </select>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('status') ? #fields.errors('status') : ''}"></div>
+                </div>
+
+                <!-- Arrival Date -->
+                <div class="mb-3">
+                    <label for="arrivalDate" class="form-label">Arrival Date</label>
+                    <input type="date" class="form-control" id="arrivalDate" th:field="*{arrivalDate}" required>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('arrivalDate') ? #fields.errors('arrivalDate') : ''}"></div>
+                </div>
+
+                <!-- Eviction Date -->
+                <div class="mb-3">
+                    <label for="evictionDate" class="form-label">Eviction Date</label>
+                    <input type="date" class="form-control" id="evictionDate" th:field="*{evictionDate}" required>
+                    <div class="invalid-feedback" th:text="${#fields.hasErrors('evictionDate') ? #fields.errors('evictionDate') : ''}"></div>
+                </div>
+
+                <!-- Is Hot -->
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="isHot" th:field="*{isHot}">
+                    <label class="form-check-label" for="isHot">Is Hot</label>
+                </div>
+
+                <!-- Save Button -->
+                <button type="submit" class="btn btn-primary">Save Voucher</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

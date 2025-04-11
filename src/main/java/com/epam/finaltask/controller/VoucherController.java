@@ -2,9 +2,11 @@ package com.epam.finaltask.controller;
 
 import com.epam.finaltask.dto.UserDTO;
 import com.epam.finaltask.dto.VoucherDTO;
+import com.epam.finaltask.exception.EntityNotFoundException;
 import com.epam.finaltask.model.HotelType;
 import com.epam.finaltask.model.TourType;
 import com.epam.finaltask.model.TransferType;
+import com.epam.finaltask.model.VoucherStatus;
 import com.epam.finaltask.service.UserServiceImpl;
 import com.epam.finaltask.service.VoucherServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -62,6 +65,7 @@ public class VoucherController {
     }
 
     @PostMapping("{voucher_id}")
+    @PreAuthorize("hasRole('USER')")
     public String order(@PathVariable("voucher_id") String voucher_id, Model model,RedirectAttributes redirectAttributes, HttpServletRequest request) {
         model.addAttribute("currentUri", request.getRequestURI());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -70,5 +74,56 @@ public class VoucherController {
         redirectAttributes.addFlashAttribute("orderSuccess", "Voucher ordered successfully!");
         return "redirect:/vouchers/" + voucher_id;
     }
+
+    @PostMapping("{voucher_id}/hot")
+    @PreAuthorize("hasRole('MANAGER')")
+    public String setHot(@PathVariable String voucher_id, @RequestParam boolean hot, RedirectAttributes redirectAttributes){
+        VoucherDTO voucherDTO = new VoucherDTO();
+        voucherDTO.setIsHot(hot);
+        voucherService.changeHotStatus(voucher_id,voucherDTO);
+        redirectAttributes.addFlashAttribute("message", "Voucher hot is set to " + hot);
+        return "redirect:/vouchers/" + voucher_id;
+    }
+
+    @PostMapping("{voucher_id}/status")
+    @PreAuthorize("hasRole('MANAGER')")
+    public String setVoucherStatus(@PathVariable String voucher_id,
+                                   @RequestParam VoucherStatus status,
+                                   RedirectAttributes redirectAttributes){
+        voucherService.changeVoucherStatus(voucher_id, status);
+        redirectAttributes.addFlashAttribute("message", "Voucher status is set to " + status);
+        return "redirect:/vouchers/" + voucher_id;
+    }
+
+    @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteVoucher(@PathVariable String id) {
+        voucherService.delete(id);
+        return "redirect:/vouchers";
+    }
+
+    @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showEditForm(@PathVariable String id, Model model) {
+        VoucherDTO voucher = voucherService.findById(id);
+        model.addAttribute("voucher", voucher);
+        return "voucher_form";
+    }
+
+    @PostMapping("/save/{voucher_id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String saveVoucher( @PathVariable String voucher_id ,@ModelAttribute VoucherDTO voucher) {
+        voucherService.update(voucher_id ,voucher);
+        return "redirect:/vouchers";
+    }
+
+    @GetMapping("/new")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showCreateForm(Model model) {
+        model.addAttribute("voucher", new VoucherDTO());
+        return "voucher_form";
+    }
+
+
 
 }

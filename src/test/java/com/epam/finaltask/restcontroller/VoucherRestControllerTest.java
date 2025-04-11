@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.epam.finaltask.service.VoucherServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class VoucherRestControllerTest {
 
     @MockBean
-    private VoucherService voucherService;
+    private VoucherServiceImpl voucherService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -109,10 +110,10 @@ public class VoucherRestControllerTest {
         voucherDTO.setTitle("SummerSale2024");
         voucherDTO.setDescription("Summer Sale Voucher Description");
         voucherDTO.setPrice(299.99);
-        voucherDTO.setTourType(TourType.ADVENTURE.name());
-        voucherDTO.setTransferType(TransferType.PLANE.name());
-        voucherDTO.setHotelType(HotelType.FIVE_STARS.name());
-        voucherDTO.setStatus(VoucherStatus.PAID.name());
+        voucherDTO.setTourType(TourType.valueOf(TourType.ADVENTURE.name()));
+        voucherDTO.setTransferType(TransferType.valueOf(TransferType.PLANE.name()));
+        voucherDTO.setHotelType(HotelType.valueOf(HotelType.FIVE_STARS.name()));
+        voucherDTO.setStatus(VoucherStatus.valueOf(VoucherStatus.PAID.name()));
         voucherDTO.setArrivalDate(LocalDate.of(2024, 6, 15));
         voucherDTO.setEvictionDate(LocalDate.of(2024, 6, 20));
         voucherDTO.setUserId(UUID.randomUUID());
@@ -140,10 +141,10 @@ public class VoucherRestControllerTest {
         voucherDTO.setTitle("UpdatedTitle");
         voucherDTO.setDescription("Updated description");
         voucherDTO.setPrice(499.99);
-        voucherDTO.setTourType(TourType.SAFARI.name());
-        voucherDTO.setTransferType(TransferType.JEEPS.name());
-        voucherDTO.setHotelType(HotelType.THREE_STARS.name());
-        voucherDTO.setStatus(VoucherStatus.PAID.name());
+        voucherDTO.setTourType(TourType.valueOf(TourType.SAFARI.name()));
+        voucherDTO.setTransferType(TransferType.valueOf(TransferType.JEEPS.name()));
+        voucherDTO.setHotelType(HotelType.valueOf(HotelType.THREE_STARS.name()));
+        voucherDTO.setStatus(VoucherStatus.valueOf(VoucherStatus.PAID.name()));
         voucherDTO.setArrivalDate(LocalDate.of(2024, 7, 15));
         voucherDTO.setEvictionDate(LocalDate.of(2024, 7, 20));
         voucherDTO.setUserId(UUID.randomUUID());

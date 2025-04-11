@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${voucher.title} + ' | TravelEase'">Voucher Detail</title>
+    <title th:text="${voucher.title} + ' | TravelEase'">[[#{page.voucher.title}]]</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
@@ -39,42 +39,36 @@
     </style>
 </head>
 <body>
-<!-- Navigation (include your navbar fragment) -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Main Content -->
 <main class="container mb-5">
-    <!-- Voucher Header -->
+
     <div class="voucher-header rounded-3 mb-4">
-<!--         th:style="${voucher.imageUrl != null} ? 'background-image: url(' + ${voucher.imageUrl} + ')' : 'background-color: #f8f9fa'">-->
         <div class="position-relative text-white p-4 p-md-5 h-100 d-flex align-items-end">
             <div class="hot-badge" th:if="${voucher.isHot}">
-                    <span class="badge bg-danger py-2 px-3 fs-6">
-                        <i class="bi bi-fire me-1"></i> HOT DEAL
-                    </span>
+                <span class="badge bg-danger py-2 px-3 fs-6">
+                    <i class="bi bi-fire me-1"></i> [[#{voucher.hot}]]
+                </span>
             </div>
             <div>
                 <h1 class="display-4 fw-bold" th:text="${voucher.title}">Voucher Title</h1>
-                <p class="lead mb-0" th:text="${voucher.tourType}">Tour Type</p>
+                <p class="lead mb-0" th:text="#{voucher.tourType} + ': ' + ${voucher.tourType}">Tour Type</p>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <!-- Main Content -->
         <div class="col-lg-8">
-            <!-- Description -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h2 class="card-title h4"><i class="bi bi-info-circle me-2"></i>Description</h2>
-                    <p class="card-text" th:text="${voucher.description}">Detailed description of the voucher package.</p>
+                    <h2 class="card-title h4"><i class="bi bi-info-circle me-2"></i> [[#{voucher.description.title}]]</h2>
+                    <p class="card-text" th:text="${voucher.description}">[[#{voucher.description.text}]]</p>
                 </div>
             </div>
 
-
             <div class="card mb-4">
                 <div class="card-body">
-                    <h2 class="card-title h4"><i class="bi bi-journal-text me-2"></i>Itinerary</h2>
+                    <h2 class="card-title h4"><i class="bi bi-journal-text me-2"></i> [[#{voucher.itinerary.title}]]</h2>
                     <div class="accordion" id="itineraryAccordion">
                         <div class="accordion-item" th:each="day,iter : ${#numbers.sequence(1, 5)}">
                             <h2 class="accordion-header">
@@ -82,7 +76,7 @@
                                         th:classappend="${iter.index == 0} ? '' : 'collapsed'"
                                         data-bs-toggle="collapse"
                                         th:data-bs-target="'#day' + ${day}">
-                                    Day <span th:text="${day}">1</span>
+                                    [[#{voucher.itinerary.day}]] <span th:text="${day}">1</span>
                                 </button>
                             </h2>
                             <div th:id="'day' + ${day}"
@@ -90,7 +84,7 @@
                                  th:classappend="${iter.index == 0} ? 'show' : ''"
                                  data-bs-parent="#itineraryAccordion">
                                 <div class="accordion-body">
-                                    <p th:text="'Activities for day ' + ${day}">Detailed activities description.</p>
+                                    <p th:text="#{voucher.itinerary.activities(${day})}">Day details</p>
                                 </div>
                             </div>
                         </div>
@@ -99,72 +93,105 @@
             </div>
         </div>
 
-        <!-- Booking Sidebar -->
         <div class="col-lg-4">
             <div class="card sticky-top" style="top: 20px;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="price-tag text-primary" th:text="'$' + ${#numbers.formatDecimal(voucher.price, 1, 2, 'COMMA')}">$1,200.00</span>
-                        <span class="badge  bg-
-                            <span class="badge th:class="${voucher.status.name() == 'PAID' ||
-                            voucher.status.name()=='REGISTERED'} ? 'bg-success' : 'bg-danger'"
-                        th:text="${voucher.status}">CANCELED </span>
+                        <span class="price-tag text-primary" th:text="#{voucher.price.prefix} + ${#numbers.formatDecimal(voucher.price, 1, 2, 'COMMA')}">$0.00</span>
+                        <span class="badge"
+                              th:class="${voucher.status.name() == 'PAID' || voucher.status.name() == 'REGISTERED'} ? 'bg-success' : 'bg-danger'">
+                                <th:block th:switch="${voucher.status.name()}">
+                                    <span th:case="'PAID'">[[#{voucher.status.paid}]]</span>
+                                    <span th:case="'REGISTERED'">[[#{voucher.status.registered}]]</span>
+                                    <span th:case="'CANCELED'">[[#{voucher.status.canceled}]]</span>
+                                    <span th:case="*">[[#{voucher.status.unknown}]]</span>
+                                </th:block>
+                            </span>
+
                     </div>
 
                     <div class="highlight-box mb-4">
                         <p class="mb-1"><i class="bi bi-calendar-check me-2"></i>
-                            <span th:text="${#temporals.format(voucher.arrivalDate, 'dd MMM yyyy')}">15 Jun 2024</span> -
-                            <span th:text="${#temporals.format(voucher.evictionDate, 'dd MMM yyyy')}">20 Jun 2024</span>
+                            <span th:text="#{voucher.dates(
+                              ${#temporals.format(voucher.arrivalDate, 'dd MMM yyyy')},
+                              ${#temporals.format(voucher.evictionDate, 'dd MMM yyyy')}
+                            )}">Dates</span>
                         </p>
                         <p class="mb-1"><i class="bi bi-house me-2"></i>
-                            <span th:text="${voucher.hotelType}">FIVE_STAR</span> Accommodation
+                            [[#{voucher.hotelType}]]: <span th:text="${voucher.hotelType}">FIVE_STAR</span>
                         </p>
                         <p class="mb-0"><i class="bi bi-car-front me-2"></i>
-                            <span th:text="${voucher.transferType}">PRIVATE_TRANSFER</span> Transfer
+                            [[#{voucher.transferType}]]: <span th:text="${voucher.transferType}">PRIVATE_TRANSFER</span>
                         </p>
                     </div>
 
                     <form th:action="@{/vouchers/{voucher_id}(voucher_id=${voucher.id})}" method="post">
-                    <div class="d-grid gap-2">
+                        <div class="d-grid gap-2">
                             <button class="btn btn-primary btn-lg" th:if="${voucher.status.name() == 'PAID'}">
-                                <i class="bi bi-cart3 me-2"></i> Book Now
+                                <i class="bi bi-cart3 me-2"></i> [[#{voucher.bookNow}]]
                             </button>
                             <button class="btn btn-primary btn-lg" th:if="${voucher.status.name() == 'REGISTERED'}">
-                                Register Now
+                                [[#{voucher.registerNow}]]
                             </button>
                             <button class="btn btn-outline-secondary" th:if="${voucher.status.name() == 'CANCELED'}">
-                                Not Available
+                                [[#{voucher.notAvailable}]]
                             </button>
                             <button class="btn btn-outline-primary">
-                                <i class="bi bi-heart me-2"></i> Save to Wishlist
+                                <i class="bi bi-heart me-2"></i> [[#{voucher.saveWishlist}]]
                             </button>
                             <button class="btn btn-link text-decoration-none">
-                                <i class="bi bi-question-circle me-2"></i> Ask a Question
+                                <i class="bi bi-question-circle me-2"></i> [[#{voucher.askQuestion}]]
                             </button>
                         </div>
                     </form>
+
                     <div th:if="${orderSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
                         <span th:text="${orderSuccess}"></span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
-
-
                     <hr>
 
                     <div class="alert alert-info mt-3" th:if="${voucher.isHot}">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        <strong>Hot Deal!</strong> This offer is selling fast - book now to secure your spot!
+                        <strong>[[#{voucher.alert.hotTitle}]]</strong> [[#{voucher.alert.hotDesc}]]
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Manager Controls -->
+    <div th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+        <form th:action="@{/vouchers/{voucher_id}/hot(voucher_id=${voucher.id})}" method="post" class="mb-2">
+            <div class="input-group mb-2">
+                <select class="form-select" name="hot">
+                    <option value="true">[[#{voucher.manager.hotLabel}]]</option>
+                    <option value="false">[[#{voucher.manager.defaultLabel}]]</option>
+                </select>
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="bi bi-fire"></i> [[#{voucher.manager.update}]]
+                </button>
+            </div>
+        </form>
+
+        <form th:action="@{/vouchers/{voucher_id}/status(voucher_id=${voucher.id})}" method="post">
+            <div class="input-group mb-2">
+                <select class="form-select" name="status">
+                    <option value="REGISTERED">[[#{voucher.status.registered}]]</option>
+                    <option value="CANCELED">[[#{voucher.status.canceled}]]</option>
+                    <option value="PAID">[[#{voucher.status.paid}]]</option>
+                </select>
+                <button type="submit" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-repeat"></i> [[#{voucher.manager.statusUpdate}]]
+                </button>
+            </div>
+        </form>
+    </div>
+
 </main>
 
-<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

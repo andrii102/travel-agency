@@ -27,8 +27,3 @@ CREATE TABLE voucher
     CONSTRAINT pk_voucher PRIMARY KEY (voucher_id),
     CONSTRAINT FK_VOUCHER_ON_USER_ID FOREIGN KEY (user_id) REFERENCES "user" (id)
 );
-
-CREATE TABLE user_info(
-    id  UUID NOT NULL,
-    firstName VARCHAR(36)
-);

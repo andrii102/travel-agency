@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/vouchers")
 public class VoucherRestController {
     @Autowired
-    VoucherService voucherService;
+    VoucherServiceImpl voucherService;
 
     @GetMapping
     public ResponseEntity<Map<String, List<VoucherDTO>>> getVouchers() {

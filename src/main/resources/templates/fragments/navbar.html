@@ -17,6 +17,9 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/vouchers}" th:text="#{navbar.vouchers}">Vouchers</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/about}" th:text="#{navbar.about}">About</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/profile}" th:text="#{navbar.profile}">Profile</a></li>
+                <li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a class="nav-link" th:href="@{/admin/users}" th:text="#{navbar.users}">Users</a>
+                </li>
             </ul>
 
             <!-- Language Switcher -->

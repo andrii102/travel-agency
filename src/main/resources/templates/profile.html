@@ -43,16 +43,23 @@
 
         <!-- Main Content -->
         <div class="col-lg-9">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header" th:text="#{profile.upcoming_trips}">Upcoming Trips</div>
-                <div class="card-body">
-                    <div class="alert alert-info" th:utext="#{profile.no_upcoming_trips}">
-                        У вас немає майбутніх подорожей. <a href="/tours">Перегляньте тури</a>, щоб забронювати наступну пригоду!
+            <div th:if="${#lists.isEmpty(userVouchers)}" class="alert alert-info" th:utext="#{profile.no_upcoming_trips}">
+                У вас немає майбутніх подорожей. <a href="/tours">Перегляньте тури</a>, щоб забронювати наступну пригоду!
+            </div>
+
+            <div th:if="${!#lists.isEmpty(userVouchers)}">
+                <div class="list-group">
+                    <div class="list-group-item" th:each="voucher : ${userVouchers}">
+                        <h5 class="mb-1" th:text="${voucher.title}">Tour Name</h5>
+                        <p class="mb-1">
+                            <span th:text="${voucher.arrivalDate}">Start Date</span> -
+                            <span th:text="${voucher.evictionDate}">End Date</span>
+                        </p>
+                        <small th:text="'Status: ' + ${voucher.status}">Status: REGISTERED</small>
                     </div>
-
-
                 </div>
             </div>
+
 
             <div class="card shadow-sm">
                 <div class="card-header" th:text="#{profile.personal_info}">Personal Information</div>

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class VoucherServiceImpl implements VoucherService{
     private UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public VoucherDTO create(VoucherDTO voucherDTO) {
         Voucher voucher = voucherMapper.toVoucher(voucherDTO);
         voucherRepo.save(voucher);
@@ -36,6 +38,7 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
     @Override
+    @PreAuthorize("hasRole('USER')")
     public VoucherDTO order(String id, String userId) {
         Optional<User> user =  userRepository.findById(UUID.fromString(userId));
         Optional<Voucher> voucher = voucherRepo.findById(UUID.fromString(id));
@@ -49,10 +52,12 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public VoucherDTO update(String id, VoucherDTO voucherDTO) {
         Optional<Voucher> voucher = voucherRepo.findById(UUID.fromString(id));
         if(voucher.isPresent()){
             Voucher newVoucher = voucherMapper.toVoucher(voucherDTO);
+            newVoucher.setId(voucher.get().getId());
             voucherRepo.save(newVoucher);
             return voucherMapper.toVoucherDTO(newVoucher);
         }
@@ -60,6 +65,7 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String voucherId) {
         Optional<Voucher> voucher = voucherRepo.findById(UUID.fromString(voucherId));
         if(voucher.isPresent()){
@@ -70,12 +76,13 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
     @Override
+    @PreAuthorize("hasRole('MANAGER')")
     public VoucherDTO changeHotStatus(String id, VoucherDTO voucherDTO) {
         Optional<Voucher> voucher = voucherRepo.findById(UUID.fromString(id));
         if(voucher.isPresent()){
-            Voucher newVoucher = voucherMapper.toVoucher(voucherDTO);
-            voucherRepo.save(newVoucher);
-            return voucherMapper.toVoucherDTO(newVoucher);
+            voucher.get().setHot(voucherDTO.getIsHot());
+            voucherRepo.save(voucher.get());
+            return voucherMapper.toVoucherDTO(voucher.get());
         }
         throw new EntityNotFoundException(StatusCodes.ENTITY_NOT_FOUND.name(), "Not found");
     }
@@ -146,5 +153,25 @@ public class VoucherServiceImpl implements VoucherService{
                 .collect(Collectors.toList());
 
         return new PageImpl<>(voucherDTOList, pageable, voucherPage.getTotalElements());
+    }
+
+    public List<VoucherDTO> findUserVouchers(String userId) {
+        List<Voucher> vouchers = voucherRepo.findAllByUserId(UUID.fromString(userId));
+        List<VoucherDTO> vouchersDTO = new ArrayList<>();
+        for (Voucher voucher : vouchers) {
+            vouchersDTO.add(voucherMapper.toVoucherDTO(voucher));
+        }
+        return vouchersDTO;
+    }
+
+    @PreAuthorize("hasRole('MANAGER')")
+    public VoucherDTO changeVoucherStatus(String id, VoucherStatus voucherStatus) {
+        Optional<Voucher> voucher =  voucherRepo.findById(UUID.fromString(id));
+        if(voucher.isPresent()){
+            voucher.get().setStatus(voucherStatus);
+            voucherRepo.save(voucher.get());
+            return voucherMapper.toVoucherDTO(voucher.get());
+        }
+        throw new EntityNotFoundException(StatusCodes.ENTITY_NOT_FOUND.name(), "Not found");
     }
 }
