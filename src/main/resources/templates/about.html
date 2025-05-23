@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:lang="en" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
   <title th:text="#{about.title}">About Us - Travel Agency</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
 
@@ -14,39 +15,45 @@
 <header class="bg-primary text-white text-center py-5 mb-4">
   <div class="container">
     <h1 class="display-4" th:text="#{about.title}">About Our Agency</h1>
-    <p class="lead" th:text="#{about.subtitle}">Your journey begins with us</p>
+    <p class="lead mb-0" th:text="#{about.subtitle}">Your journey begins with us</p>
   </div>
 </header>
 
 <!-- About Content -->
 <section class="container mb-5">
-  <div class="row align-items-center">
+  <div class="row align-items-center gy-4">
     <div class="col-lg-6">
-      <img src="https://via.placeholder.com/600x400" alt="Our Team" class="img-fluid rounded shadow">
+      <img th:src="@{'https://plus.unsplash.com/premium_photo-1722945652527-d8d7ba9fd0d5?q=80&w=2735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}"
+           alt="Our Team" class="img-fluid rounded shadow">
     </div>
     <div class="col-lg-6">
-      <h2 class="mb-4" th:text="#{about.our_story}">Our Story</h2>
-      <p th:text="#{about.story_content}">Founded in 2010, our travel agency has been creating unforgettable experiences for travelers worldwide. We specialize in unique destinations and personalized service.</p>
+      <h2 class="mb-3" th:text="#{about.our_story}">Our Story</h2>
+      <p class="mb-4" th:text="#{about.story_content}">
+        Founded in 2010, our travel agency has been creating unforgettable experiences for travelers worldwide.
+        We specialize in unique destinations and personalized service.
+      </p>
 
-      <div class="mt-5">
-        <h3 th:text="#{about.why_choose}">Why Choose Us?</h3>
-        <div class="d-flex mt-3">
-          <div class="me-4 text-primary">
-            <i class="bi bi-award-fill" style="font-size: 2rem;"></i>
-          </div>
-          <div>
-            <h5 th:text="#{about.expertise}">Expertise</h5>
-            <p th:text="#{about.expertise_content}">Our team has over 50 years of combined travel experience.</p>
-          </div>
+      <h3 class="mb-3" th:text="#{about.why_choose}">Why Choose Us?</h3>
+
+      <!-- Feature 1 -->
+      <div class="d-flex align-items-start mb-3">
+        <div class="text-primary me-3">
+          <i class="bi bi-award-fill" style="font-size: 2rem;"></i>
         </div>
-        <div class="d-flex mt-3">
-          <div class="me-4 text-primary">
-            <i class="bi bi-heart-fill" style="font-size: 2rem;"></i>
-          </div>
-          <div>
-            <h5 th:text="#{about.passion}">Passion</h5>
-            <p th:text="#{about.passion_content}">We genuinely love travel and sharing that passion with you.</p>
-          </div>
+        <div>
+          <h5 class="mb-1" th:text="#{about.expertise}">Expertise</h5>
+          <p class="mb-0" th:text="#{about.expertise_content}">Our team has over 50 years of combined travel experience.</p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="d-flex align-items-start">
+        <div class="text-primary me-3">
+          <i class="bi bi-heart-fill" style="font-size: 2rem;"></i>
+        </div>
+        <div>
+          <h5 class="mb-1" th:text="#{about.passion}">Passion</h5>
+          <p class="mb-0" th:text="#{about.passion_content}">We genuinely love travel and sharing that passion with you.</p>
         </div>
       </div>
     </div>
@@ -57,13 +64,14 @@
 <section class="bg-light py-5">
   <div class="container">
     <h2 class="text-center mb-5" th:text="#{about.our_team}">Meet Our Team</h2>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card text-center h-100 border-0 shadow-sm">
-          <img src="https://via.placeholder.com/300x300" class="card-img-top rounded-circle w-50 mx-auto mt-3" alt="Team Member">
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center h-100 border-0 shadow-sm p-3">
+          <img th:src="@{'https://plus.unsplash.com/premium_vector-1721131162397-943dc390c744?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}"
+               class="rounded-circle mx-auto mb-3" style="width: 120px; height: 120px; object-fit: cover;" alt="Team Member">
           <div class="card-body">
-            <h5 class="card-title">Andrii Kohut</h5>
-            <p class="text-muted" th:text="#{about.role_tour_guide}">Tour Guide</p>
+            <h5 class="card-title mb-1">John Doe</h5>
+            <p class="text-muted mb-2" th:text="#{about.role_tour_guide}">Tour Guide</p>
             <p class="card-text" th:text="#{about.andrii_bio}">Specializes in cultural tours with 10 years experience.</p>
           </div>
         </div>

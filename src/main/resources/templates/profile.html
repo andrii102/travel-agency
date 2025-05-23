@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:lang="en" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title th:text="#{profile.title}">My Profile - Travel Agency</title>
@@ -14,7 +14,10 @@
 <!-- Profile Header -->
 <header class="bg-primary text-white py-5">
     <div class="container text-center">
-        <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Profile Photo">
+        <img th:src="@{'https://plus.unsplash.com/premium_vector-1718713546137-dc86f3cc81d2?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJhZ29ufGVufDB8MnwwfHx8MA%3D%3D'}"
+             class="rounded-circle mb-3 d-block mx-auto"
+             style="width: 150px; height: 150px; object-fit: cover;"
+             alt="Profile Photo">
         <h1 th:text="#{profile.welcome(${user.username})}">Welcome, John</h1>
         <p class="lead mb-0" th:text="#{profile.member_since('2023')}">Member since 2023</p>
     </div>

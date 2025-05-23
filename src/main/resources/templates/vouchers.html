@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:lang="en" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
   <title th:text="#{app.title}">Travel Agency</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
@@ -21,7 +22,7 @@
 
 <!-- Search & Filters -->
 <section class="container mb-5">
-  <form class="card shadow-sm" method="get" th:action="@{/vouchers}">
+  <form class="p-4 border rounded shadow-sm bg-white" method="get" th:action="@{/vouchers}">
     <div class="card-body">
       <div class="row g-3 align-items-end">
 
@@ -44,11 +45,11 @@
         <!-- Price Range -->
         <div class="col-md-2">
           <label class="form-label">Min Price</label>
-          <input type="number" class="form-control" name="minPrice" placeholder="0">
+          <input type="number" class="form-control" name="minPrice" min="0" placeholder="0">
         </div>
         <div class="col-md-2">
           <label class="form-label">Max Price</label>
-          <input type="number" class="form-control" name="maxPrice" placeholder="5000">
+          <input type="number" class="form-control" name="maxPrice" min="0" placeholder="5000">
         </div>
 
         <!-- Transfer Type -->
@@ -94,66 +95,76 @@
 
 
 <section class="container mb-5">
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <div class="col" th:each="voucher : ${vouchers}">
-      <div class="card h-100 shadow-sm">
-<!--        <img th:src="${voucher.imageUrl}" class="card-img-top" th:alt="${tour.title}">-->
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-2">
+  <div th:if="${vouchers != null and !vouchers.isEmpty()}">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" th:each="voucher : ${vouchers}">
+        <a th:href="@{'vouchers/' + ${voucher.id}}" style="text-decoration: none; color: inherit">
+          <div class="card h-100 shadow-sm">
+            <img th:src="@{'https://images.unsplash.com/photo-1740315026131-df2e809c94c9?q=80&w=2681&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}" class="card-img-top">
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
             <span class="badge bg-danger"
                   th:if="${voucher != null and voucher.isHot}"
                   th:text="#{vouchers.isHot}">Hot</span>
-            <span class="text-primary fw-bold" th:text="#{vouchers.from_price(${voucher.price})}">
+                <span class="text-primary fw-bold" th:text="#{vouchers.from_price(${voucher.price})}">
               From $299
             </span>
-          </div>
-          <h5 class="card-title" th:text="${voucher.title}">Kyiv City Tour</h5>
-          <p class="card-text" th:text="${voucher.description}">
-            Explore the historic capital of Ukraine with our expert guides.
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <i class="bi bi-calendar me-1"></i>
-              <span th:text="${voucher.arrivalDate} + '-' + ${voucher.evictionDate}"></span>
-            </div>
-            <a th:href="@{'/vouchers/' + ${voucher.id}}" class="btn btn-primary" th:text="#{vouchers.book_now}">Book Now</a>
+              </div>
+              <h5 class="card-title" th:text="${voucher.title}">Kyiv City Tour</h5>
+              <p class="card-text" th:text="${voucher.description}">
+                Explore the historic capital of Ukraine with our expert guides.
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <i class="bi bi-calendar me-1"></i>
+                  <span th:text="${voucher.arrivalDate} + '-' + ${voucher.evictionDate}"></span>
+                </div>
+                <a th:href="@{'/vouchers/' + ${voucher.id}}" class="btn btn-primary" th:text="#{vouchers.book_now}">Book Now</a>
 
+              </div>
+              <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <a th:href="@{'/vouchers/edit/' + ${voucher.id}}" class="btn btn-warning btn-sm">Edit</a>
+                <a th:href="@{'/vouchers/delete/' + ${voucher.id}}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</a>
+              </div>
+            </div>
           </div>
-          <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-            <a th:href="@{'/vouchers/edit/' + ${voucher.id}}" class="btn btn-warning btn-sm">Edit</a>
-            <a th:href="@{'/vouchers/delete/' + ${voucher.id}}" class="btn btn-danger btn-sm"
-               onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</a>
-          </div>
-        </div>
+        </a>
       </div>
     </div>
+
+    <!-- Pagination -->
+    <nav class="mt-5">
+      <ul class="pagination justify-content-center">
+        <!-- Previous Button -->
+        <li class="page-item" th:class="${currentPage == 0 ? 'disabled' : ''}">
+          <a class="page-link"
+             th:href="@{|/vouchers?page=${currentPage - 1}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}"
+             tabindex="-1">Previous</a>
+        </li>
+
+        <!-- Dynamic Page Number Links -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i ? 'active' : ''}">
+          <a class="page-link"
+             th:href="@{|/vouchers?page=${i}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}"
+             th:text="${i + 1}"></a>
+        </li>
+
+        <!-- Next Button -->
+        <li class="page-item" th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+          <a class="page-link"
+             th:href="@{|/vouchers?page=${currentPage + 1}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Empty message -->
+  <div class="text-center py-5" th:unless="${vouchers != null and !vouchers.isEmpty()}">
+    <h4 th:text="#{vouchers.no_results}">No vouchers found for the selected filters.</h4>
   </div>
 
 
-  <!-- Pagination -->
-  <nav class="mt-5">
-    <ul class="pagination justify-content-center">
-      <!-- Previous Button -->
-      <li class="page-item" th:class="${currentPage == 0 ? 'disabled' : ''}">
-        <a class="page-link"
-           th:href="@{|/vouchers?page=${currentPage - 1}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}"
-           tabindex="-1">Previous</a>
-      </li>
-
-      <!-- Dynamic Page Number Links -->
-      <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i ? 'active' : ''}">
-        <a class="page-link"
-           th:href="@{|/vouchers?page=${i}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}"
-           th:text="${i + 1}"></a>
-      </li>
-
-      <!-- Next Button -->
-      <li class="page-item" th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-        <a class="page-link"
-           th:href="@{|/vouchers?page=${currentPage + 1}&${minPrice != null ? 'minPrice=' + minPrice + '&' : ''}${transferType != null ? 'transferType=' + transferType + '&' : ''}${hotelType != null ? 'hotelType=' + hotelType + '&' : ''}|}">Next</a>
-      </li>
-    </ul>
-  </nav>
 
 </section>
 
