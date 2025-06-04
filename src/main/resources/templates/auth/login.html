@@ -10,6 +10,10 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         <h2 class="text-center mb-4">Login</h2>
+        <!-- Error Message -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <!-- Logout Message -->
+        <div th:if="${logout}" class="alert alert-success" th:text="${logout}"></div>
         <form th:action="@{/login}" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
