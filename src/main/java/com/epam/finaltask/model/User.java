@@ -1,16 +1,19 @@
 package com.epam.finaltask.model;
 
-import jakarta.validation.constraints.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -35,7 +38,7 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Voucher> vouchers;
 
-	@Pattern(regexp = "\\+[0-9]{10,15}", message = "Invalid phone number format")
+	@Pattern(regexp = "\\+?[0-9]{10,15}", message = "Invalid phone number format")
     private String phoneNumber;
 
 	@DecimalMin(value = "0.0", message = "Balance cannot be negative")
