@@ -1,104 +1,72 @@
-# Travel agency. Spring Project
+# ✈️ Travel Agency – Spring Boot MVC Application
 
-The purpose of this task is to check your knowledge in Java and Spring.
+A full-featured travel agency system built with Java and Spring Boot using **MVC pattern** and **server-side rendering (SSR)** via Thymeleaf.  
+This app allows users to browse, book, and manage tours with role-based access and secure authentication using **JWT and HTTP sessions combined**.
 
-Duration: **18** hours
+---
 
-## Description
+## 📌 Features
 
-In this task, you will implement "Travel Agency Service" using MVC pattern. All the main classes are available and waiting
-for you in the appropriate folders.
+- 🔐 **Secure Authentication**: Uses **JWT tokens** for authorization and **HTTP sessions** to support the SSR (Thymeleaf-based) web interface.
+- 🧳 **Tour Browsing & Filtering**:
+    - by type (rest, excursion, shopping)
+    - by price
+    - by transfer type (bus, plane, ship, etc.)
+    - by hotel type (1–5 stars)
+- 👤 **User Profile**: Shows selected tours and their current status.
+- 💼 **Manager Panel**:
+    - Mark tours as **hot**
+    - Change tour status (registered → paid/canceled)
+- 🛠 **Admin Panel**:
+    - Add/delete/edit tours
+    - Block/unblock users
+- 🌍 **Internationalization**: Multilingual UI support
+- 🧹 **Validation & Error Handling**: Input checks and informative feedback
+- 🔍 **Pagination & Sorting**: View tours in a clean paginated interface
+- 📜 **Logging**: Application event tracking and debugging
 
-The class diagram of the Domain model is shown in the figure below:
+---
 
-![diagram.png](TravelAgency.jpg)
+## 🛠️ Technologies Used
 
-The travel agency has a catalogue of tours. `Authorized user` can select tours by:
-- type (rest, excursion, shopping)
-- by price
-- by transfer type (car, plane, ship)
-- by hotel type;
+- **Java 17**, **Spring Boot 3+**
+- **Spring MVC**, **Thymeleaf**
+- **Spring Security** (JWT + Session)
+- **Spring Data JPA**, **Hibernate**
+- **Lombok**, **ModelMapper**
+- **H2** (configurable)
+- **Maven**
 
-> Note: only registered users can select and order tours.
+---
 
-`Tour` must have:
-1. Title
-2. Description
-3. Price
-4. Type of tour
-5. Type of transfer
-6. Hotel type
-7. Status (registered, paid, canceled)
-8. Arrival ate
-9. Eviction date
+## 🗂 Project Structure
 
-Tour can also be hot.
+- `aspect/` – Logging or cross-cutting concerns
+- `auth/` – Authentication and token logic
+- `config/` – App configuration (Spring, security, locale)
+- `controller/` – MVC controllers for SSR views
+- `dto/` – Data Transfer Objects for passing data
+- `exception/` – Custom exceptions & global handlers
+- `mapper/` – Entity ↔ DTO mappers
+- `model/` – JPA entity classes (User, Tour, etc.)
+- `repository/` – JPA Repositories (UserRepository, etc.)
+- `security/` – JWT utilities, filters, config
+- `service/` – Business logic layer
+- `token/` – Token generation and validation
 
-`User` must have personal account, which contains information about him (name, surname, balance, email, [optional] password), as well as a list of selected tours and their current status.
+---
 
-### Permissions
+## 🔧 Setup & Running
 
-`Manager`
-- defines tour as `hot`. These tours are always displayed at the top of the list.
-- transfer the status of the tour from `registered` to `paid` or `canceled`
+### Prerequisites
 
-`Administrator` has all manager functionality, plus:
-- add/delete tour
-- change tour information (all fields)
-- block/unblock user
+- Java 17+
+- Maven 3.6+
 
+### Steps
 
+1. **Clone repo**
 
-
-## Commands
-
-### Run project
-
-```mvn spring-boot:run```
-
-
-## Structure
-
-Your project is organized into several packages. Here's a brief overview of each:
-
-- All configuration classes are located here.
-
-- **`auth`**: Contains files related to authentication.
-- **`config`**: Contains configuration files for application.
-- **`controller`**: Contains implementations of all declared controllers.
-- **`dto`**: Contains DTO files.
-- **`exeption`**: Contains custom exceptions and error handler.
-- **`mapper`**: Contains Mapper files.
-- **`model`**: Contains entities files.
-- **`repository`**: Contains repository files.
-- **`service`**: Contains service interfaces and their implementations.
-- **`token`**: Contains JWT token related files.
-
-## Requirements
-
-You should use and successfully implement next points:
-
-- `Spring Data JPA`
-- `Spring Security`
-- `Internationalization and Localization`
-- `Validation`
-- `Error handling`
-
-## Nice to have
-
-- `Logging`
-- `Pagination and sorting`
-- `Other Spring technologies`
-- `Swagger API`
-- `Thymeleaf`
-
-## Recommendations
-
-- Use `Lombok`
-- Use tools like `Postman` or `Insomnia`
-- Use `ModelMapper`
-
-## Special message
-
-- Not forget to improvise and try to use different approaches while implementing your solution.
-- Time is limited to 18 hours. Don't waste your time.
+   ```bash
+   git clone https://github.com/andrii102/travel-agency.git
+   cd travel-agency
