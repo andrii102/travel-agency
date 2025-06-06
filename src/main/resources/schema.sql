@@ -3,8 +3,11 @@ CREATE TABLE "user"
     id             UUID    NOT NULL,
     username       VARCHAR(255),
     password       VARCHAR(255),
+    first_name     VARCHAR(255),
+    last_name      VARCHAR(255),
     role           VARCHAR(255),
     phone_number   VARCHAR(255),
+    email       VARCHAR(255),
     balance        DOUBLE PRECISION,
     account_status BOOLEAN NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)

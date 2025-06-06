@@ -32,6 +32,11 @@ public class User {
 	@Size(min=8, message = "Password must be at least 8 characters")
     private String password;
 
+
+	private String firstName;
+
+	private String lastName;
+
 	@Enumerated(EnumType.STRING)
     private Role role;
 
@@ -40,6 +45,8 @@ public class User {
 
 	@Pattern(regexp = "\\+?[0-9]{10,15}", message = "Invalid phone number format")
     private String phoneNumber;
+
+	private String email;
 
 	@DecimalMin(value = "0.0", message = "Balance cannot be negative")
     private Double balance;

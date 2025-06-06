@@ -18,8 +18,9 @@
              class="rounded-circle mb-3 d-block mx-auto"
              style="width: 150px; height: 150px; object-fit: cover;"
              alt="Profile Photo">
-        <h1 th:text="#{profile.welcome(${user.username})}">Welcome, John</h1>
-        <p class="lead mb-0" th:text="#{profile.member_since('2023')}">Member since 2023</p>
+        <h1 th:if="${user.firstName}" th:text="#{profile.welcome(${user.firstName})}"></h1>
+        <h1 th:unless="${user.firstName}" th:text="#{profile.welcome('Guest')}"></h1>
+        <p class="lead mb-0" th:text="#{profile.quote}">Dream. Explore. Discover.</p>
     </div>
 </header>
 
@@ -47,7 +48,7 @@
         <!-- Main Content -->
         <div class="col-lg-9">
             <div th:if="${#lists.isEmpty(userVouchers)}" class="alert alert-info" th:utext="#{profile.no_upcoming_trips}">
-                У вас немає майбутніх подорожей. <a href="/tours">Перегляньте тури</a>, щоб забронювати наступну пригоду!
+                You have no upcoming trips. <a href='/tours'>Browse tours</a> to book your next adventure!
             </div>
 
             <div th:if="${!#lists.isEmpty(userVouchers)}">
@@ -67,22 +68,22 @@
             <div class="card shadow-sm">
                 <div class="card-header" th:text="#{profile.personal_info}">Personal Information</div>
                 <div class="card-body">
-                    <form>
+                    <form th:action="@{/profile/update-credantials}" th:object="${user}" method="post" class="needs-validation">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" th:text="#{profile.first_name}">First Name</label>
-                                <input type="text" class="form-control" value="John">
+                                <input type="text" th:field="*{firstName}" class="form-control">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" th:text="#{profile.last_name}">Last Name</label>
-                                <input type="text" class="form-control" value="Doe">
+                                <input type="text" th:field="*{lastName}" class="form-control">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" th:text="#{profile.email}">Email</label>
-                            <input type="email" class="form-control" value="john@example.com">
+                            <input type="email" th:field="*{email}" class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-primary" th:text="#{profile.save_changes}">Save Changes</button>
+                        <button type="submit"  class="btn btn-primary" th:text="#{profile.save_changes}">Save Changes</button>
                     </form>
                 </div>
             </div>

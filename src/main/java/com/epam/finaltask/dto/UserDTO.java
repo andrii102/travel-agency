@@ -1,11 +1,14 @@
 package com.epam.finaltask.dto;
 
-import java.util.List;
-
 import com.epam.finaltask.model.Voucher;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,8 +24,11 @@ public class UserDTO {
 	@Size(min = 8, message = "Password must be at least 8 characters long")
 	private String password;
 
-	@NotBlank(message = "Role is required")
+	private String firstName;
 
+	private String lastName;
+
+	@NotBlank(message = "Role is required")
 	private String role = "USER";
 
 	private List<Voucher> vouchers;
@@ -30,6 +36,8 @@ public class UserDTO {
 	@NotBlank(message = "Phone number is required")
 	@Pattern(regexp = "\\+?[0-9]{10,15}", message = "Invalid phone number format")
 	private String phoneNumber;
+
+	private String email;
 
 	@DecimalMin(value = "0.0", message = "Balance cannot be negative")
 	private Double balance;

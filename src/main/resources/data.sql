@@ -1,8 +1,8 @@
-INSERT INTO "user" (id, username, password, role, phone_number, balance, account_status)
+INSERT INTO "user" (id, username, password, first_name, last_name, role, phone_number, balance, account_status)
 VALUES
-    ('550e8400-e29b-41d4-a716-446655440000', 'admin', '$2a$12$30KAqjJ1.FY5Qc0zbFIWse3M6aqLCQw7zIa/oI1s9kOeDqwoMcvtS', 'ADMIN', '+381234567890', 100.0, TRUE), --admin123
-    ('550e8400-e29b-41d4-a716-446655440001', 'manager', '$2a$12$FKLrwzxPlL.yk1WnGXup3OefDYN/eUw.ajKlWJUStDOKoaCoYVvXG', 'MANAGER', '+381224567890', 0, TRUE),
-    ('550e8400-e29b-41d4-a716-446655440002', 'Andrii', '$2a$12$fIBTpVBEPMKYkVcHixbx8uCf98Favuzvr/HBhIefIYZMHUMRT1RTK', 'USER', '+380987654321', 50.0, TRUE); --andrii123
+    ('550e8400-e29b-41d4-a716-446655440000', 'admin', '$2a$12$30KAqjJ1.FY5Qc0zbFIWse3M6aqLCQw7zIa/oI1s9kOeDqwoMcvtS','Admin',null, 'ADMIN', '+381234567890', 100.0, TRUE), --admin123
+    ('550e8400-e29b-41d4-a716-446655440001', 'manager', '$2a$12$FKLrwzxPlL.yk1WnGXup3OefDYN/eUw.ajKlWJUStDOKoaCoYVvXG', 'Manager', null, 'MANAGER', '+381224567890', 0, TRUE),
+    ('550e8400-e29b-41d4-a716-446655440002', 'Andrii', '$2a$12$fIBTpVBEPMKYkVcHixbx8uCf98Favuzvr/HBhIefIYZMHUMRT1RTK','Andrii', null, 'USER', '+380987654321', 50.0, TRUE); --andrii123
 
 INSERT INTO voucher (voucher_id, title, description, price, tour_type, transfer_type, hotel_type, status, arrival_date, eviction_date, user_id, is_hot)
 VALUES

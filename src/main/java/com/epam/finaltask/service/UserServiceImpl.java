@@ -1,13 +1,14 @@
 package com.epam.finaltask.service;
 
+import com.epam.finaltask.dto.UserCredentialsDTO;
 import com.epam.finaltask.dto.UserDTO;
 import com.epam.finaltask.dto.UserTableDTO;
 import com.epam.finaltask.exception.EntityAlreadyExistsException;
 import com.epam.finaltask.exception.EntityNotFoundException;
-import com.epam.finaltask.model.User;
-import com.epam.finaltask.model.Role;
 import com.epam.finaltask.exception.StatusCodes;
 import com.epam.finaltask.mapper.UserMapper;
+import com.epam.finaltask.model.Role;
+import com.epam.finaltask.model.User;
 import com.epam.finaltask.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService{
 		throw new EntityNotFoundException(ENTITY_NOT_FOUND.name(),  username);
 	}
 
-	// NEEDS TO BE CHECKED
+
 	@Override
 	public UserDTO changeAccountStatus(UserDTO userDTO) {
 		Optional<User> user = userRepo.findById(UUID.fromString(userDTO.getId()));
@@ -99,22 +100,45 @@ public class UserServiceImpl implements UserService{
 		return userDTOs;
 	}
 
-	public UserTableDTO blockUser(String id) {
+	public void blockUser(String id) {
 		Optional<User> user = userRepo.findById(UUID.fromString(id));
 		if(user.isPresent()) {
 			user.get().setAccountStatus(false);
 			userRepo.save(user.get());
-			return userMapper.toUserTableDTO(user.get());
+			return;
 		}
 		throw new EntityNotFoundException(ENTITY_NOT_FOUND.name(), "User not found");
 	}
 
-	public  UserTableDTO unblockUser(String id) {
+	public void unblockUser(String id) {
 		Optional<User> user = userRepo.findById(UUID.fromString(id));
 		if(user.isPresent()) {
 			user.get().setAccountStatus(true);
 			userRepo.save(user.get());
-			return userMapper.toUserTableDTO(user.get());
+			return;
+		}
+		throw new EntityNotFoundException(ENTITY_NOT_FOUND.name(), "User not found");
+	}
+
+	public UserCredentialsDTO getUserCredentials(String username) {
+		return userRepo.findUserByUsername(username).map(user -> {
+			UserCredentialsDTO userCredentialsDTO = new UserCredentialsDTO();
+			userCredentialsDTO.setFirstName(user.getFirstName());
+			userCredentialsDTO.setLastName(user.getLastName());
+			userCredentialsDTO.setEmail(user.getEmail());
+			return userCredentialsDTO;
+		}).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND.name(), "User not found"));
+
+	}
+
+	public void updateUserCredentials(UserCredentialsDTO userCredentialsDTO, String username) {
+		Optional<User> user = userRepo.findUserByUsername(username);
+		if(user.isPresent()) {
+			user.get().setFirstName(userCredentialsDTO.getFirstName());
+			user.get().setLastName(userCredentialsDTO.getLastName());
+			user.get().setEmail(userCredentialsDTO.getEmail());
+			userRepo.save(user.get());
+			return;
 		}
 		throw new EntityNotFoundException(ENTITY_NOT_FOUND.name(), "User not found");
 	}
