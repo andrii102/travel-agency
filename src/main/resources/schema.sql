@@ -8,6 +8,7 @@ CREATE TABLE "user"
     role           VARCHAR(255),
     phone_number   VARCHAR(255),
     email       VARCHAR(255),
+    registration_date DATE,
     balance        DOUBLE PRECISION,
     account_status BOOLEAN NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)

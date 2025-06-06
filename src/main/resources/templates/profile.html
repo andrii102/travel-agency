@@ -8,13 +8,11 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Profile Header -->
 <header class="bg-primary text-white py-5">
     <div class="container text-center">
-        <img th:src="@{'https://plus.unsplash.com/premium_vector-1718713546137-dc86f3cc81d2?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJhZ29ufGVufDB8MnwwfHx8MA%3D%3D'}"
+        <img th:src="@{'https://plus.unsplash.com/premium_vector-1718713546137-dc86f3cc81d2?w=700&auto=format&fit=crop&q=60'}"
              class="rounded-circle mb-3 d-block mx-auto"
              style="width: 150px; height: 150px; object-fit: cover;"
              alt="Profile Photo">
@@ -24,33 +22,66 @@
     </div>
 </header>
 
-<!-- Profile Content -->
 <section class="container py-5">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-lg-3">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white" th:text="#{profile.navigation}">Navigation</div>
-                <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action active" th:text="#{profile.overview}">
-                        <i class="bi bi-house-door me-2"></i> Overview
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action" th:text="#{profile.bookings}">
-                        <i class="bi bi-calendar-check me-2"></i> My Bookings
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action" th:text="#{profile.settings}">
-                        <i class="bi bi-gear me-2"></i> Settings
-                    </a>
+    <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button"
+                    th:text="#{profile.overview}">Overview</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button"
+                    th:text="#{profile.bookings}">Bookings</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button"
+                    th:text="#{profile.settings}">Settings</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="profileTabContent">
+        <!-- Overview -->
+        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+            <div class="alert alert-info" th:if="${#lists.isEmpty(userVouchers)}" th:utext="#{profile.no_upcoming_trips}">
+                You have no upcoming trips. <a href='/vouchers'>Browse tours</a> to book your next adventure!
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header" th:text="#{profile.account_summary}">Account Summary</div>
+                <div class="card-body">
+                    <p><strong th:text="#{profile.full_name} + ':'">Full Name:</strong> <span th:text="${user.firstName + ' ' + user.lastName}"></span></p>
+                    <p><strong th:text="#{profile.email} + ':'">Email:</strong> <span th:text="${user.email}"></span></p>
+                    <p><strong th:text="#{profile.registration_date} + ':'">Registered On:</strong>
+                        <span th:text="${#temporals.format(user.registrationDate, 'dd MMMM yyyy')}">1 Jan 2025</span>
+                    </p>
+                    <p><strong th:text="#{profile.total_bookings} + ':'">Total Bookings:</strong>
+                        <span th:text="${userVouchers != null ? #lists.size(userVouchers) : 0}">0</span>
+                    </p>
+                </div>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(userVouchers)}" class="card mb-4">
+                <div class="card-header" th:text="#{profile.upcoming_trips}">Upcoming Trip</div>
+                <div class="card-body" th:with="next=${userVouchers[0]}">
+                    <h5 th:text="${next.title}">Tour Title</h5>
+                    <p>
+                        <strong th:text="#{profile.dates} + ':'">Dates:</strong>
+                        <span th:text="${next.arrivalDate}"></span> –
+                        <span th:text="${next.evictionDate}"></span>
+                    </p>
+                    <p>
+                        <strong th:text="#{profile.status} + ':'">Status:</strong>
+                        <span class="badge bg-info text-dark" th:text="${next.status}">REGISTERED</span>
+                    </p>
+                    <a th:href="@{/vouchers}" class="btn btn-outline-primary btn-sm" th:text="#{profile.browse_vouchers}">Explore More Tours</a>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-lg-9">
-            <div th:if="${#lists.isEmpty(userVouchers)}" class="alert alert-info" th:utext="#{profile.no_upcoming_trips}">
-                You have no upcoming trips. <a href='/tours'>Browse tours</a> to book your next adventure!
+        <!-- Bookings -->
+        <div class="tab-pane fade" id="bookings" role="tabpanel">
+            <div class="alert alert-info" th:if="${#lists.isEmpty(userVouchers)}" th:utext="#{profile.no_upcoming_trips}">
+                You have no upcoming trips. <a href='/vouchers'>Browse tours</a> to book your next adventure!
             </div>
-
             <div th:if="${!#lists.isEmpty(userVouchers)}">
                 <div class="list-group">
                     <div class="list-group-item" th:each="voucher : ${userVouchers}">
@@ -59,16 +90,25 @@
                             <span th:text="${voucher.arrivalDate}">Start Date</span> -
                             <span th:text="${voucher.evictionDate}">End Date</span>
                         </p>
-                        <small th:text="'Status: ' + ${voucher.status}">Status: REGISTERED</small>
+                        <small>
+                            <span th:text="#{profile.status} + ':'">Status:</span>
+                            <span class="badge"
+                                  th:classappend="${voucher.status == 'REGISTERED' ? 'bg-success' :
+                                    (voucher.status == 'CANCELLED' ? 'bg-danger' : 'bg-secondary')}"
+                                  th:text="${voucher.status}">
+                            </span>
+                        </small>
                     </div>
                 </div>
             </div>
+        </div>
 
-
+        <!-- Settings -->
+        <div class="tab-pane fade" id="settings" role="tabpanel">
             <div class="card shadow-sm">
                 <div class="card-header" th:text="#{profile.personal_info}">Personal Information</div>
                 <div class="card-body">
-                    <form th:action="@{/profile/update-credantials}" th:object="${user}" method="post" class="needs-validation">
+                    <form th:action="@{/profile/update-credantials}" th:object="${user}" method="post">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" th:text="#{profile.first_name}">First Name</label>
@@ -83,7 +123,7 @@
                             <label class="form-label" th:text="#{profile.email}">Email</label>
                             <input type="email" th:field="*{email}" class="form-control">
                         </div>
-                        <button type="submit"  class="btn btn-primary" th:text="#{profile.save_changes}">Save Changes</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{profile.save_changes}">Save Changes</button>
                     </form>
                 </div>
             </div>
@@ -91,7 +131,6 @@
     </div>
 </section>
 
-<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

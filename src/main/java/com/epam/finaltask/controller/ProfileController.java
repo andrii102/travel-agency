@@ -48,9 +48,7 @@ public class ProfileController {
 
     @PostMapping("/update-credantials")
     public String updateCredentials(@ModelAttribute("user") UserCredentialsDTO userCredentialsDTO,
-                                    @AuthenticationPrincipal UserDetails userDetails,
-                                    Model model, HttpServletRequest request) {
-        model.addAttribute("currentUri", request.getRequestURI());
+                                    @AuthenticationPrincipal UserDetails userDetails) {
 
         userService.updateUserCredentials(userCredentialsDTO, userDetails.getUsername());
 

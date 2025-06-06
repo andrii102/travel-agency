@@ -126,6 +126,7 @@ public class UserServiceImpl implements UserService{
 			userCredentialsDTO.setFirstName(user.getFirstName());
 			userCredentialsDTO.setLastName(user.getLastName());
 			userCredentialsDTO.setEmail(user.getEmail());
+			userCredentialsDTO.setRegistrationDate(user.getRegistrationDate());
 			return userCredentialsDTO;
 		}).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND.name(), "User not found"));
 

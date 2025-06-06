@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +49,8 @@ public class User {
 
 	private String email;
 
+	private LocalDate registrationDate;
+
 	@DecimalMin(value = "0.0", message = "Balance cannot be negative")
     private Double balance;
 
@@ -55,6 +58,11 @@ public class User {
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@PrePersist
+	public void setRegistrationDate() {
+		registrationDate = LocalDate.now();
 	}
 
 	public void addVoucher(Voucher voucher) {
