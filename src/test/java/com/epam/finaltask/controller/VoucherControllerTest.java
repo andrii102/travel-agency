@@ -2,22 +2,18 @@ package com.epam.finaltask.controller;
 
 import com.epam.finaltask.dto.UserDTO;
 import com.epam.finaltask.dto.VoucherDTO;
-import com.epam.finaltask.model.HotelType;
-import com.epam.finaltask.model.TourType;
-import com.epam.finaltask.model.TransferType;
+import com.epam.finaltask.dto.VoucherSearchParams;
 import com.epam.finaltask.model.VoucherStatus;
 import com.epam.finaltask.service.UserServiceImpl;
 import com.epam.finaltask.service.VoucherServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
@@ -59,11 +55,11 @@ public class VoucherControllerTest {
         // Arrange
         VoucherDTO voucherDTO = new VoucherDTO();
         Page<VoucherDTO> page = new PageImpl<>(Collections.singletonList(voucherDTO));
-        when(voucherService.findFilteredVouchers(any(), any(), any(), any(), any(), any())).thenReturn(page);
+        when(voucherService.findFilteredVouchers(any(), any())).thenReturn(page);
         when(request.getRequestURI()).thenReturn("/vouchers");
 
         // Act
-        String viewName = voucherController.vouchers(0, null, null, null, null, null, model, request);
+        String viewName = voucherController.vouchers(0, new VoucherSearchParams(), model, request);
 
         // Assert
         assertEquals("vouchers", viewName);

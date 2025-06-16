@@ -2,10 +2,7 @@ package com.epam.finaltask.controller;
 
 import com.epam.finaltask.dto.UserDTO;
 import com.epam.finaltask.dto.VoucherDTO;
-import com.epam.finaltask.exception.EntityNotFoundException;
-import com.epam.finaltask.model.HotelType;
-import com.epam.finaltask.model.TourType;
-import com.epam.finaltask.model.TransferType;
+import com.epam.finaltask.dto.VoucherSearchParams;
 import com.epam.finaltask.model.VoucherStatus;
 import com.epam.finaltask.service.UserServiceImpl;
 import com.epam.finaltask.service.VoucherServiceImpl;
@@ -13,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,24 +31,18 @@ public class VoucherController {
 
     @GetMapping()
     public String vouchers(@RequestParam(value = "page", defaultValue = "0") int page,
-                           @RequestParam(required = false) TourType tourType,
-                           @RequestParam(required = false) Double minPrice,
-                           @RequestParam(required = false) Double maxPrice,
-                           @RequestParam(required = false) TransferType transferType,
-                           @RequestParam(required = false) HotelType hotelType,
+                           @ModelAttribute VoucherSearchParams voucherSearchParams,
                            Model model, HttpServletRequest request) {
 
         model.addAttribute("currentUri", request.getRequestURI());
 
         int pageSize = 6;
-        Page<VoucherDTO> vouchersPage = voucherService.findFilteredVouchers(tourType, minPrice, maxPrice, transferType, hotelType, PageRequest.of(page, pageSize));
+        Page<VoucherDTO> vouchersPage = voucherService.findFilteredVouchers(voucherSearchParams, PageRequest.of(page, pageSize));
 
         model.addAttribute("vouchers", vouchersPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", vouchersPage.getTotalPages());
-        model.addAttribute("minPrice", minPrice);
-        model.addAttribute("transferType", transferType);
-        model.addAttribute("hotelType", hotelType);
+        model.addAttribute("voucherSearchParams", voucherSearchParams);
 
         return "vouchers";
     }

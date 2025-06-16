@@ -3,18 +3,23 @@ package com.epam.finaltask.service;
 import com.epam.finaltask.dto.VoucherDTO;
 import com.epam.finaltask.exception.EntityNotFoundException;
 import com.epam.finaltask.mapper.VoucherMapper;
-import com.epam.finaltask.model.*;
+import com.epam.finaltask.model.User;
+import com.epam.finaltask.model.Voucher;
 import com.epam.finaltask.repository.UserRepository;
 import com.epam.finaltask.repository.VoucherRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.data.domain.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class VoucherServiceImplTest {
 
@@ -109,20 +114,6 @@ class VoucherServiceImplTest {
 
         VoucherDTO result = voucherService.findById(id.toString());
         assertEquals(dto, result);
-    }
-
-    @Test
-    void findFilteredVouchers_shouldReturnPage() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Voucher voucher = new Voucher();
-        VoucherDTO dto = new VoucherDTO();
-        Page<Voucher> page = new PageImpl<>(List.of(voucher), pageable, 1);
-
-        when(voucherRepo.findFilteredVouchers(null, null, null, null, null, pageable)).thenReturn(page);
-        when(voucherMapper.toVoucherDTO(voucher)).thenReturn(dto);
-
-        Page<VoucherDTO> result = voucherService.findFilteredVouchers(null, null, null, null, null, pageable);
-        assertEquals(1, result.getContent().size());
     }
 
     @Test

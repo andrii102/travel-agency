@@ -22,62 +22,50 @@
 
 <!-- Search & Filters -->
 <section class="container mb-5">
-  <form class="p-4 border rounded shadow-sm bg-white" method="get" th:action="@{/vouchers}">
+  <form class="p-4 border rounded shadow-sm bg-white" th:object="${voucherSearchParams}" method="get" th:action="@{/vouchers}">
     <div class="card-body">
       <div class="row g-3 align-items-end">
 
         <!-- Tour Type -->
         <div class="col-md-3">
           <label class="form-label">Tour Type</label>
-          <select class="form-select" name="tourType">
+          <select class="form-select" th:field="*{tourType}" name="tourType">
             <option value="">All</option>
-            <option>HEALTH</option>
-            <option>SPORTS</option>
-            <option>LEISURE</option>
-            <option>SAFARI</option>
-            <option>WINE</option>
-            <option>ECO</option>
-            <option>ADVENTURE</option>
-            <option>CULTURAL</option>
+            <option th:each="type : ${T(com.epam.finaltask.model.TourType).values()}"
+                    th:value="${type}"
+                    th:text="${type}">TourType</option>
           </select>
         </div>
 
         <!-- Price Range -->
         <div class="col-md-2">
           <label class="form-label">Min Price</label>
-          <input type="number" class="form-control" name="minPrice" min="0" placeholder="0">
+          <input type="number" class="form-control" th:value="${voucherSearchParams.minPrice}" name="minPrice" min="0" placeholder="0">
         </div>
         <div class="col-md-2">
           <label class="form-label">Max Price</label>
-          <input type="number" class="form-control" name="maxPrice" min="0" placeholder="5000">
+          <input type="number" class="form-control" th:value="${voucherSearchParams.maxPrice}" name="maxPrice" min="0" placeholder="5000">
         </div>
 
         <!-- Transfer Type -->
         <div class="col-md-2">
           <label class="form-label">Transfer Type</label>
-          <select class="form-select" name="transferType">
+          <select class="form-select" th:field="*{transferType}" name="transferType">
             <option value="">All</option>
-            <option>BUS</option>
-            <option>TRAIN</option>
-            <option>PLANE</option>
-            <option>SHIP</option>
-            <option>PRIVATE_CAR</option>
-            <option>JEEPS</option>
-            <option>MINIBUS</option>
-            <option>ELECTRICAL_CARS</option>
+            <option th:each="type : ${T(com.epam.finaltask.model.TransferType).values()}"
+                    th:value="${type}"
+                    th:text="${type}">TransferType</option>
           </select>
         </div>
 
         <!-- Hotel Type -->
         <div class="col-md-2">
           <label class="form-label">Hotel Type</label>
-          <select class="form-select" name="hotelType">
+          <select class="form-select" th:field="*{hotelType}" name="hotelType">
             <option value="">All</option>
-            <option>ONE_STAR</option>
-            <option>TWO_STARS</option>
-            <option>THREE_STARS</option>
-            <option>FOUR_STARS</option>
-            <option>FIVE_STARS</option>
+            <option th:each="type : ${T(com.epam.finaltask.model.HotelType).values()}"
+            th:value="${type}"
+            th:text="${type}">HotelType</option>
           </select>
         </div>
 

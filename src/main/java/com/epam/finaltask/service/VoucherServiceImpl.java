@@ -1,16 +1,19 @@
 package com.epam.finaltask.service;
 
 import com.epam.finaltask.dto.VoucherDTO;
+import com.epam.finaltask.dto.VoucherSearchParams;
 import com.epam.finaltask.exception.EntityNotFoundException;
 import com.epam.finaltask.exception.StatusCodes;
 import com.epam.finaltask.mapper.VoucherMapper;
 import com.epam.finaltask.model.*;
 import com.epam.finaltask.repository.UserRepository;
 import com.epam.finaltask.repository.VoucherRepository;
+import com.epam.finaltask.util.SpecificationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -145,8 +148,13 @@ public class VoucherServiceImpl implements VoucherService{
         throw new EntityNotFoundException(StatusCodes.ENTITY_NOT_FOUND.name(), "Not found");
     }
 
-    public Page<VoucherDTO> findFilteredVouchers(TourType tourType, Double minPrice, Double maxPrice, TransferType transferType, HotelType hotelType, Pageable pageable) {
-        Page<Voucher> voucherPage = voucherRepo.findFilteredVouchers(tourType, minPrice, maxPrice, transferType, hotelType, pageable);
+    public Page<VoucherDTO> findFilteredVouchers(VoucherSearchParams voucherSearchParams, Pageable pageable) {
+        Specification<Voucher> spec = Specification.where(SpecificationUtils.<Voucher, Double>gte("price", voucherSearchParams.getMinPrice()))
+                .and(SpecificationUtils.lte("price", voucherSearchParams.getMaxPrice()))
+                .and(SpecificationUtils.eq("tourType", voucherSearchParams.getTourType()))
+                .and(SpecificationUtils.eq("transferType", voucherSearchParams.getTransferType()))
+                .and(SpecificationUtils.eq("hotelType", voucherSearchParams.getHotelType()));
+        Page<Voucher> voucherPage = voucherRepo.findAll(spec, pageable);
 
         List<VoucherDTO> voucherDTOList = voucherPage.getContent().stream()
                 .map(voucherMapper::toVoucherDTO)

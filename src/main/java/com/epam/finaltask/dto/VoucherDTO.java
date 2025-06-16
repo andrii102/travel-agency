@@ -1,14 +1,17 @@
 package com.epam.finaltask.dto;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 import com.epam.finaltask.model.HotelType;
 import com.epam.finaltask.model.TourType;
 import com.epam.finaltask.model.TransferType;
 import com.epam.finaltask.model.VoucherStatus;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 public class VoucherDTO {
@@ -29,19 +32,15 @@ public class VoucherDTO {
 
 	@NotBlank(message = "Tour type is required")
 	private TourType tourType;
-//	private String tourType;
 
 	@NotBlank(message = "Transfer type is required")
 	private TransferType transferType;
-//	private String transferType;
 
 	@NotBlank(message = "Hotel type is required")
 	private HotelType hotelType;
-//	private String hotelType;
 
 	@NotBlank(message = "Status is required")
 	private VoucherStatus status;
-//	private String status;
 
 	@NotNull(message = "Arrival date is required")
 	private LocalDate arrivalDate;
